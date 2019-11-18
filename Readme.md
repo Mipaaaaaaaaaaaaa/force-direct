@@ -30,14 +30,14 @@
 
 1. 初始化页面时位置
 
-![image-20191118165444687](/Users/jeanne/Library/Application Support/typora-user-images/image-20191118165444687.png)
+![1](1.png)
 
 2. 稳定后位置（约2s后）
 
-![image-20191118165553713](/Users/jeanne/Library/Application Support/typora-user-images/image-20191118165553713.png)
+![2](2.png)
 
 3. 拖拽边节点
 
-![image-20191118165730163](/Users/jeanne/Library/Application Support/typora-user-images/image-20191118165730163.png)
+![3](3.png)
 
 在更改了布局之后，图像经过迭代变换，达到了趋于稳定的位置后停止了变换。
