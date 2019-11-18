@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>force-direct demo</title>
+</head>
+<svg width="800" height="600"></svg>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="./force.js"></script>
+<script>
+    //初始化连线数据
+    var link_data = [
+        {source:0,target:1},
+        {source:1,target:2},
+        {source:0,target:2},
+        {source:3,target:2},
+        {source:4,target:2},
+        {source:5,target:2},
+        {source:6,target:2},
+    ];
+    //初始化节点数据
+    var node_data = [
+        { id:0 },
+        { id:1 },
+        { id:2 },
+        { id:3 },
+        { id:4 },
+        { id:5 },
+        { id:6 },
+    ];
+    var timeclock = 1; //图像的变化速度，可调整1～10内最佳
+    var svg = d3.select("svg"); //通过d3绑定svg
+    var width = +svg.attr("width");//载入宽度数据
+    var length = +svg.attr("height");//载入高度数据
+    node_data = initial(node_data,width,length);//初始化节点位置
+    var link = svg.append("g")//绑定link数据
+        .attr("class","links")
+        .selectAll("line")
+        .data(link_data)
+        .enter().append("line")
+        .attr("stroke-width",2)
+        .attr("stroke","pink")
+    ;
+
+    var node = svg.append("g")//绑定node数据
+        .attr("class","nodes")
+        .selectAll("circle")
+        .data(node_data)
+        .enter().append("circle")
+        .attr("stroke","pink")
+        .attr("fill","pink")
+    ;
+
+setInterval(function () { //实时更新，更新速度可调整
+            node_data = force(node_data, link_data, width, length);
+            //绑定link数据
+            link.attr("x1",function(d){return node_data[d.source].x;})
+                .attr("x2",function(d){return node_data[d.target].x;})
+                .attr("y1",function(d){return node_data[d.source].y;})
+                .attr("y2",function(d){return node_data[d.target].y;})
+            ;
+            //绑定node数据
+            node.attr("cx",function(d){return d.x})
+                .attr("cy",function(d){return d.y})
+                .attr("r",15)
+            ;
+        }
+,timeclock);
+
+    //采用d3处理拖动
+    var drag_handler = d3.drag()
+        .on("start",drag_start)
+        .on("drag",drag_drag)
+        .on("end",drag_end)
+    ;
+
+    //绑定node拖动事件
+    drag_handler(node);
+
+    //开始拖动
+    function drag_start(d) {
+        d.dx = 0;
+        d.dy = 0;
+    }
+
+    //拖动中
+    //实时将x的偏移量计算出来，传入更新坐标函数
+    function drag_drag(d){
+        d.dx = d3.event.x - d.x;
+        d.dy = d3.event.y - d.y;
+    }
+
+    //结束拖动
+    function drag_end(d) {
+        d.dx = 0;
+        d.dy = 0;
+    }
+
+</script>
+
+</html>
+
