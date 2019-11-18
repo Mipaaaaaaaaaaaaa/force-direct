@@ -84,9 +84,12 @@ setInterval(function () { //实时更新，更新速度可调整
 
     //拖动中
     //实时将x的偏移量计算出来，传入更新坐标函数
+    //加入判断函数防止越界
     function drag_drag(d){
-        d.dx = d3.event.x - d.x;
-        d.dy = d3.event.y - d.y;
+        if(d3.event.x > 0 && d3.event.x < width )
+            d.dx = d3.event.x - d.x;
+        if(d3.event.y > 0 && d3.event.y < length )
+            d.dy = d3.event.y - d.y;
     }
 
     //结束拖动
